@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 
+
 export default function Hero() {
   return (
     <section className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-6 pt-24 pb-32">
