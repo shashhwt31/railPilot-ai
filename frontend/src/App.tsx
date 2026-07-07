@@ -3,6 +3,7 @@ import Hero from "@/components/sections/Hero";
 import Features from "@/components/sections/Features";
 import SearchSection from "@/components/sections/SearchSection";
 import Stats from "@/components/sections/Stats";
+import TrainResults from "@/components/sections/TrainResults";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Navbar />
       <Hero />
       <SearchSection />
+      <TrainResults />
       <Features />
       <Stats />
     </div>
