@@ -4,6 +4,9 @@ import Features from "@/components/sections/Features";
 import SearchSection from "@/components/sections/SearchSection";
 import TrainResults from "@/components/sections/TrainResults";
 import Statistics from "@/components/sections/Statistics";
+import HowItWorks from "@/components/sections/HowItWorks";
+import Testimonials from "@/components/sections/Testimonials";
+import Footer from "@/components/sections/Footer";
 
 function App() {
   return (
@@ -13,7 +16,10 @@ function App() {
       <SearchSection />
       <TrainResults />
       <Statistics />
+      <HowItWorks />
+      <Testimonials />
       <Features />
+      <Footer />
       
     </div>
   );
