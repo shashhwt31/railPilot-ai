@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import Navbar from "@/components/layout/Navbar";
 import Hero from "@/components/sections/Hero";
@@ -18,25 +18,54 @@ interface SearchData {
 
 function App() {
   const [searchData, setSearchData] = useState<SearchData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const resultsRef = useRef<HTMLDivElement>(null);
 
   const handleSearch = (data: SearchData) => {
+  setIsLoading(true);
+
+  setTimeout(() => {
     setSearchData(data);
-  };
+    setIsLoading(false);
+
+    setTimeout(() => {
+      resultsRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }, 1500);
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white">
       <Navbar />
       <Hero />
 
-      <SearchSection onSearch={handleSearch} />
+      <SearchSection
+  onSearch={handleSearch}
+  isLoading={isLoading}
+/>
 
-      {searchData && (
-        <TrainResults
-          from={searchData.from}
-          to={searchData.to}
-          date={searchData.date}
-        />
+      {isLoading && (
+        <div className="py-20 text-center">
+          <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-cyan-500 border-t-transparent"></div>
+
+          <p className="mt-6 text-lg text-cyan-400">
+            Searching trains...
+          </p>
+        </div>
       )}
+
+      {!isLoading && searchData && (
+  <div ref={resultsRef}>
+    <TrainResults
+      from={searchData.from}
+      to={searchData.to}
+      date={searchData.date}
+    />
+  </div>
+)}
 
       <Statistics />
       <HowItWorks />

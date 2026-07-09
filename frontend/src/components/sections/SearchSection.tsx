@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 interface SearchSectionProps {
+  isLoading: boolean;
   onSearch: (searchData: {
     from: string;
     to: string;
@@ -11,6 +12,7 @@ interface SearchSectionProps {
 
 export default function SearchSection({
   onSearch,
+  isLoading,
 }: SearchSectionProps) {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -80,12 +82,13 @@ export default function SearchSection({
           />
 
           <Button
-            size="lg"
-            className="bg-cyan-500 text-black hover:bg-cyan-400 lg:w-52"
-            onClick={handleSearch}
-          >
-            Search Trains
-          </Button>
+  size="lg"
+  className="bg-cyan-500 text-black hover:bg-cyan-400 lg:w-52"
+  onClick={handleSearch}
+  disabled={isLoading}
+>
+  {isLoading ? "Searching..." : "Search Trains"}
+</Button>
 
         </div>
       </div>
