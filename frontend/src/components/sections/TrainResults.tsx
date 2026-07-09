@@ -1,4 +1,14 @@
-export default function TrainResults() {
+interface TrainResultsProps {
+  from: string;
+  to: string;
+  date: string;
+}
+
+export default function TrainResults({
+  from,
+  to,
+  date,
+}: TrainResultsProps) {
   const trains = [
     {
       name: "Rajdhani Express",
@@ -31,13 +41,17 @@ export default function TrainResults() {
 
   return (
     <section className="py-24 px-6">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-4xl font-bold text-white text-center">
+      <div className="mx-auto max-w-6xl">
+        <h2 className="text-center text-4xl font-bold text-white">
           Recommended Trains
         </h2>
 
-        <p className="mt-4 text-center text-slate-400">
-          AI ranked these trains based on speed, availability and pricing.
+        <p className="mt-4 text-center text-cyan-400 text-lg">
+          {from} → {to}
+        </p>
+
+        <p className="text-center text-slate-400">
+          Journey Date: {date}
         </p>
 
         <div className="mt-12 space-y-6">
@@ -46,7 +60,7 @@ export default function TrainResults() {
               key={train.number}
               className="rounded-2xl border border-cyan-500/20 bg-slate-900/60 p-6"
             >
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-white">
                     {train.name}
@@ -59,28 +73,28 @@ export default function TrainResults() {
 
                 <div className="flex gap-10 text-center">
                   <div>
-                    <p className="text-cyan-400 font-semibold">
+                    <p className="font-semibold text-cyan-400">
                       {train.departure}
                     </p>
-                    <p className="text-slate-400 text-sm">
+                    <p className="text-sm text-slate-400">
                       Departure
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-cyan-400 font-semibold">
+                    <p className="font-semibold text-cyan-400">
                       {train.arrival}
                     </p>
-                    <p className="text-slate-400 text-sm">
+                    <p className="text-sm text-slate-400">
                       Arrival
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-cyan-400 font-semibold">
+                    <p className="font-semibold text-cyan-400">
                       {train.duration}
                     </p>
-                    <p className="text-slate-400 text-sm">
+                    <p className="text-sm text-slate-400">
                       Duration
                     </p>
                   </div>
@@ -91,7 +105,7 @@ export default function TrainResults() {
                     {train.price}
                   </p>
 
-                  <span className="inline-block mt-2 rounded-full bg-cyan-500/20 px-4 py-1 text-cyan-400">
+                  <span className="mt-2 inline-block rounded-full bg-cyan-500/20 px-4 py-1 text-cyan-400">
                     {train.status}
                   </span>
                 </div>
