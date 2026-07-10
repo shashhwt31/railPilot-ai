@@ -1,9 +1,10 @@
 import { useRef, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 
 import Navbar from "@/components/layout/Navbar";
 import Home from "@/pages/Home";
 import PassengerVault from "@/pages/PassengerVault";
+import TatkalDashboard from "@/pages/TatkalDashboard";
 
 interface SearchData {
   from: string;
@@ -34,7 +35,7 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white">
         <Navbar />
 
@@ -56,9 +57,14 @@ function App() {
             path="/vault"
             element={<PassengerVault />}
           />
+
+          <Route
+            path="/tatkal"
+            element={<TatkalDashboard />}
+          />
         </Routes>
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
