@@ -1,49 +1,182 @@
+import { useEffect, useMemo, useState } from "react";
+import { trains } from "@/data/trains";
+
+type SortOption = "ai" | "fare" | "availability" | "duration";
+
 export default function TatkalDashboard() {
+  const [secondsLeft, setSecondsLeft] = useState(
+    8 * 60 * 60 + 12 * 60 + 45
+  );
+
+  const [sortBy, setSortBy] = useState<SortOption>("ai");
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const rankedTrains = useMemo(() => {
+    const scored = trains.map((train) => ({
+      ...train,
+      score:
+        train.availability * 2 -
+        train.waitingList +
+        (1500 - train.fare) / 10 +
+        (500 - train.duration) / 10,
+    }));
+
+    switch (sortBy) {
+      case "fare":
+        return [...scored].sort((a, b) => a.fare - b.fare);
+
+      case "availability":
+        return [...scored].sort(
+          (a, b) => b.availability - a.availability
+        );
+
+      case "duration":
+        return [...scored].sort(
+          (a, b) => a.duration - b.duration
+        );
+
+      default:
+        return [...scored].sort((a, b) => b.score - a.score);
+    }
+  }, [sortBy]);
+
+  const hours = String(Math.floor(secondsLeft / 3600)).padStart(2, "0");
+  const minutes = String(
+    Math.floor((secondsLeft % 3600) / 60)
+  ).padStart(2, "0");
+  const seconds = String(secondsLeft % 60).padStart(2, "0");
+
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <h1 className="text-4xl font-bold">
           Tatkal Dashboard
         </h1>
 
         <p className="mt-3 text-slate-400">
-          Compare trains, monitor seat availability, and book faster.
+          AI-powered dashboard for smarter Tatkal bookings.
         </p>
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="mt-8 rounded-2xl border border-cyan-500/20 bg-slate-900 p-8 text-center">
+          <h2 className="text-2xl font-semibold">
+            ⏳ Tatkal Opens In
+          </h2>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">🚆 Live Seat Availability</h2>
-            <p className="mt-4 text-green-400">AVAILABLE 42</p>
-          </div>
+          <p className="mt-4 text-5xl font-bold text-cyan-400">
+            {hours}:{minutes}:{seconds}
+          </p>
+        </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">📈 Waiting List Trend</h2>
-            <p className="mt-4 text-yellow-400">WL 12 → WL 6</p>
-          </div>
+        <div className="mt-8 flex flex-wrap gap-4">
+          <button
+            onClick={() => setSortBy("ai")}
+            className={`rounded-lg px-4 py-2 transition ${
+              sortBy === "ai"
+                ? "bg-cyan-500 text-black"
+                : "bg-slate-800 hover:bg-slate-700"
+            }`}
+          >
+            ⭐ AI Pick
+          </button>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">💰 Fare Comparison</h2>
-            <p className="mt-4">₹945 • ₹875 • ₹1195</p>
-          </div>
+          <button
+            onClick={() => setSortBy("fare")}
+            className={`rounded-lg px-4 py-2 transition ${
+              sortBy === "fare"
+                ? "bg-cyan-500 text-black"
+                : "bg-slate-800 hover:bg-slate-700"
+            }`}
+          >
+            💰 Cheapest
+          </button>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">⏱ Booking Timer</h2>
-            <p className="mt-4 text-cyan-400">Opens in 08:12:45</p>
-          </div>
+          <button
+            onClick={() => setSortBy("availability")}
+            className={`rounded-lg px-4 py-2 transition ${
+              sortBy === "availability"
+                ? "bg-cyan-500 text-black"
+                : "bg-slate-800 hover:bg-slate-700"
+            }`}
+          >
+            🚆 Availability
+          </button>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">⭐ AI Recommendation</h2>
-            <p className="mt-4">Rajdhani Express</p>
-          </div>
+          <button
+            onClick={() => setSortBy("duration")}
+            className={`rounded-lg px-4 py-2 transition ${
+              sortBy === "duration"
+                ? "bg-cyan-500 text-black"
+                : "bg-slate-800 hover:bg-slate-700"
+            }`}
+          >
+            🚀 Fastest
+          </button>
+        </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h2 className="text-xl font-semibold">📍 Nearby Stations</h2>
-            <p className="mt-4">
-              New Delhi • Anand Vihar • Hazrat Nizamuddin
-            </p>
-          </div>
+        <div className="mt-10 grid gap-6 lg:grid-cols-3">
+          {rankedTrains.map((train, index) => (
+            <div
+              key={train.id}
+              className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-400 hover:-translate-y-1"
+            >
+              {index === 0 && sortBy === "ai" && (
+                <div className="mb-4 inline-block rounded-full bg-cyan-500/20 px-3 py-1 text-cyan-400">
+                  ⭐ AI PICK
+                </div>
+              )}
 
+              <h2 className="text-2xl font-bold text-white">
+                {train.name}
+              </h2>
+
+              <p className="mt-4">
+                🚆 Seats Available:
+                <span className="ml-2 font-semibold text-green-400">
+                  {train.availability}
+                </span>
+              </p>
+
+              <p className="mt-2">
+                📈 Waiting List:
+                <span className="ml-2 text-yellow-400">
+                  WL {train.waitingList}
+                </span>
+              </p>
+
+              <p className="mt-2">
+                💰 Fare:
+                <span className="ml-2 text-cyan-400">
+                  ₹{train.fare}
+                </span>
+              </p>
+
+              <p className="mt-2">
+                ⏱️ Duration:
+                <span className="ml-2 text-white">
+                  {Math.floor(train.duration / 60)}h{" "}
+                  {train.duration % 60}m
+                </span>
+              </p>
+
+              <p className="mt-4 text-cyan-400 font-semibold">
+                AI Score: {train.score.toFixed(1)}
+              </p>
+
+              <div className="mt-4 rounded-lg bg-slate-800 p-3 text-sm text-slate-300">
+                {train.score ===
+                Math.max(...rankedTrains.map((t) => t.score))
+                  ? "Recommended because it balances fare, journey time, and seat availability."
+                  : "Good alternative depending on your travel priorities."}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>
