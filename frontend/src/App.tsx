@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/Navbar";
 import Home from "@/pages/Home";
 import PassengerVault from "@/pages/PassengerVault";
 import TatkalDashboard from "@/pages/TatkalDashboard";
+import RoutePlanner from "@/pages/RoutePlanner";
 
 interface SearchData {
   from: string;
@@ -61,6 +62,11 @@ function App() {
           <Route
             path="/tatkal"
             element={<TatkalDashboard />}
+          />
+
+          <Route
+            path="/routes"
+            element={<RoutePlanner />}
           />
         </Routes>
       </div>

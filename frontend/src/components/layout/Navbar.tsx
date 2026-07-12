@@ -1,41 +1,43 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `transition ${
+      isActive
+        ? "text-cyan-400 font-semibold"
+        : "text-slate-300 hover:text-cyan-400"
+    }`;
+
   return (
-    <nav className="sticky top-0 z-50 w-full border-b border-slate-800 bg-slate-900/90 backdrop-blur">
+    <nav className="sticky top-0 z-50 border-b border-slate-800 bg-slate-900/90 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-        <Link
+        <NavLink
           to="/"
-          className="text-2xl font-bold text-white hover:text-cyan-400 transition"
+          className="text-2xl font-bold text-white transition hover:text-cyan-400"
         >
           🚆 RailPilot AI
-        </Link>
+        </NavLink>
 
         <div className="flex items-center gap-6">
-          <Link
-            to="/"
-            className="text-slate-300 transition hover:text-cyan-400"
-          >
+          <NavLink to="/" end className={navLinkClass}>
             Home
-          </Link>
+          </NavLink>
 
-          <Link
-            to="/vault"
-            className="text-slate-300 transition hover:text-cyan-400"
-          >
+          <NavLink to="/vault" className={navLinkClass}>
             Passenger Vault
-          </Link>
+          </NavLink>
 
-          <Link
-            to="/tatkal"
-            className="text-slate-300 transition hover:text-cyan-400"
-          >
+          <NavLink to="/tatkal" className={navLinkClass}>
             Tatkal Dashboard
-          </Link>
+          </NavLink>
+
+          <NavLink to="/routes" className={navLinkClass}>
+            Route Planner
+          </NavLink>
 
           <Button asChild>
-            <Link to="/vault">Get Started</Link>
+            <NavLink to="/vault">Get Started</NavLink>
           </Button>
         </div>
       </div>
