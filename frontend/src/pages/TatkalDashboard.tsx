@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { trains } from "@/data/trains";
+import { useBooking } from "@/context/BookingContext";
 
 type SortOption = "ai" | "fare" | "availability" | "duration";
 
@@ -9,6 +10,7 @@ export default function TatkalDashboard() {
   );
 
   const [sortBy, setSortBy] = useState<SortOption>("ai");
+  const { selectedPassenger } = useBooking();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -63,6 +65,56 @@ export default function TatkalDashboard() {
         <p className="mt-3 text-slate-400">
           AI-powered dashboard for smarter Tatkal bookings.
         </p>
+
+        {selectedPassenger && (
+  <div className="mt-8 rounded-2xl border border-cyan-500/30 bg-slate-900 p-6 shadow-lg">
+    <div className="flex items-center justify-between">
+      <div>
+        <h2 className="text-2xl font-bold text-cyan-400">
+          👤 Selected Passenger
+        </h2>
+
+        <p className="mt-1 text-slate-400">
+          Ready for Tatkal booking
+        </p>
+      </div>
+
+      <div className="rounded-full bg-green-500/20 px-4 py-2 text-green-400">
+        ✓ Ready
+      </div>
+    </div>
+
+    <div className="mt-6 grid gap-4 md:grid-cols-2">
+      <div className="rounded-lg bg-slate-800 p-4">
+        <p className="text-slate-400">Name</p>
+        <p className="text-lg font-semibold">
+          {selectedPassenger.name}
+        </p>
+      </div>
+
+      <div className="rounded-lg bg-slate-800 p-4">
+        <p className="text-slate-400">Age</p>
+        <p className="text-lg font-semibold">
+          {selectedPassenger.age}
+        </p>
+      </div>
+
+      <div className="rounded-lg bg-slate-800 p-4">
+        <p className="text-slate-400">Gender</p>
+        <p className="text-lg font-semibold">
+          {selectedPassenger.gender}
+        </p>
+      </div>
+
+      <div className="rounded-lg bg-slate-800 p-4">
+        <p className="text-slate-400">Preferred Berth</p>
+        <p className="text-lg font-semibold">
+          {selectedPassenger.berth}
+        </p>
+      </div>
+    </div>
+  </div>
+)}
 
         <div className="mt-8 rounded-2xl border border-cyan-500/20 bg-slate-900 p-8 text-center">
           <h2 className="text-2xl font-semibold">

@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
 
-interface Passenger {
-  id: number;
-  name: string;
-  age: string;
-  gender: string;
-  berth: string;
-}
+import PassengerCard from "@/components/Passenger/PassengerCard";
+import type { Passenger } from "@/components/Passenger/PassengerCard";
+
+import PassengerForm from "@/components/Passenger/PassengerForm";
+import PassengerSearch from "@/components/Passenger/PassengerSearch";
 
 export default function PassengerVault() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("Male");
   const [berth, setBerth] = useState("Lower Berth");
+
+  const [search, setSearch] = useState("");
+
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const [passengers, setPassengers] = useState<Passenger[]>([]);
 
@@ -31,22 +32,46 @@ export default function PassengerVault() {
       return;
     }
 
-    const newPassenger: Passenger = {
-      id: Date.now(),
-      name,
-      age,
-      gender,
-      berth,
-    };
+    if (editingId !== null) {
+      const updated = passengers.map((p) =>
+        p.id === editingId
+          ? {
+              ...p,
+              name,
+              age,
+              gender,
+              berth,
+            }
+          : p
+      );
 
-    const updatedPassengers = [...passengers, newPassenger];
+      setPassengers(updated);
+      localStorage.setItem(
+        "passengers",
+        JSON.stringify(updated)
+      );
 
-    setPassengers(updatedPassengers);
+      setEditingId(null);
+    } else {
+      const updated = [
+        ...passengers,
+        {
+          id: Date.now(),
+          name,
+          age,
+          gender,
+          berth,
+          favorite: false,
+        },
+      ];
 
-    localStorage.setItem(
-      "passengers",
-      JSON.stringify(updatedPassengers)
-    );
+      setPassengers(updated);
+
+      localStorage.setItem(
+        "passengers",
+        JSON.stringify(updated)
+      );
+    }
 
     setName("");
     setAge("");
@@ -54,22 +79,61 @@ export default function PassengerVault() {
     setBerth("Lower Berth");
   };
 
+  const editPassenger = (passenger: Passenger) => {
+    setEditingId(passenger.id);
+
+    setName(passenger.name);
+    setAge(passenger.age);
+    setGender(passenger.gender);
+    setBerth(passenger.berth);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const deletePassenger = (id: number) => {
-    const updatedPassengers = passengers.filter(
-      (passenger) => passenger.id !== id
+    const updated = passengers.filter(
+      (p) => p.id !== id
     );
 
-    setPassengers(updatedPassengers);
+    setPassengers(updated);
 
     localStorage.setItem(
       "passengers",
-      JSON.stringify(updatedPassengers)
+      JSON.stringify(updated)
     );
   };
+
+  const toggleFavorite = (id: number) => {
+    const updated = passengers.map((p) =>
+      p.id === id
+        ? {
+            ...p,
+            favorite: !p.favorite,
+          }
+        : p
+    );
+
+    setPassengers(updated);
+
+    localStorage.setItem(
+      "passengers",
+      JSON.stringify(updated)
+    );
+  };
+
+  const filteredPassengers = passengers.filter((p) =>
+    p.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
+  );
 
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto max-w-5xl">
+
         <h1 className="text-4xl font-bold">
           Passenger Vault
         </h1>
@@ -78,99 +142,56 @@ export default function PassengerVault() {
           Securely save passenger details for one-click railway bookings.
         </p>
 
-        <div className="mt-10 rounded-2xl border border-slate-800 bg-slate-900 p-8">
-          <div className="grid gap-6 md:grid-cols-2">
-            <input
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Full Name"
-              className="rounded-lg border border-slate-700 bg-slate-950 p-3"
-            />
-
-            <input
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              type="number"
-              placeholder="Age"
-              className="rounded-lg border border-slate-700 bg-slate-950 p-3"
-            />
-
-            <select
-              value={gender}
-              onChange={(e) => setGender(e.target.value)}
-              className="rounded-lg border border-slate-700 bg-slate-950 p-3"
-            >
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-
-            <select
-              value={berth}
-              onChange={(e) => setBerth(e.target.value)}
-              className="rounded-lg border border-slate-700 bg-slate-950 p-3"
-            >
-              <option>Lower Berth</option>
-              <option>Middle Berth</option>
-              <option>Upper Berth</option>
-              <option>Side Lower</option>
-              <option>Side Upper</option>
-              <option>No Preference</option>
-            </select>
-          </div>
-
-          <Button
-            onClick={savePassenger}
-            className="mt-8"
-          >
-            Save Passenger
-          </Button>
+        <div className="mt-10">
+          <PassengerForm
+            name={name}
+            setName={setName}
+            age={age}
+            setAge={setAge}
+            gender={gender}
+            setGender={setGender}
+            berth={berth}
+            setBerth={setBerth}
+            onSave={savePassenger}
+            buttonText={
+              editingId === null
+                ? "Save Passenger"
+                : "Update Passenger"
+            }
+          />
         </div>
 
         <div className="mt-12">
+
+          <PassengerSearch
+            search={search}
+            setSearch={setSearch}
+          />
+
           <h2 className="mb-6 text-3xl font-bold">
             Saved Passengers
           </h2>
 
-          {passengers.length === 0 ? (
+          {filteredPassengers.length === 0 ? (
             <p className="text-slate-400">
-              No passengers saved yet.
+              No passengers found.
             </p>
           ) : (
             <div className="grid gap-6 md:grid-cols-2">
-              {passengers.map((passenger) => (
-                <div
+              {filteredPassengers.map((passenger) => (
+                <PassengerCard
                   key={passenger.id}
-                  className="rounded-xl border border-slate-800 bg-slate-900 p-6"
-                >
-                  <h3 className="text-xl font-bold text-cyan-400">
-                    {passenger.name}
-                  </h3>
-
-                  <p className="mt-2">
-                    <strong>Age:</strong> {passenger.age}
-                  </p>
-
-                  <p>
-                    <strong>Gender:</strong> {passenger.gender}
-                  </p>
-
-                  <p>
-                    <strong>Preferred Berth:</strong> {passenger.berth}
-                  </p>
-
-                  <Button
-                    onClick={() => deletePassenger(passenger.id)}
-                    className="mt-5"
-                    variant="destructive"
-                  >
-                    Delete
-                  </Button>
-                </div>
+                  passenger={passenger}
+                  onDelete={deletePassenger}
+                  onEdit={editPassenger}
+                  onToggleFavorite={toggleFavorite}
+                />
               ))}
             </div>
           )}
+
         </div>
+
       </div>
     </main>
   );
