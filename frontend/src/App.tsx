@@ -6,6 +6,7 @@ import Home from "@/pages/Home";
 import PassengerVault from "@/pages/PassengerVault";
 import TatkalDashboard from "@/pages/TatkalDashboard";
 import RoutePlanner from "@/pages/RoutePlanner";
+import BookingReview from "@/pages/BookingReview";
 
 interface SearchData {
   from: string;
@@ -68,6 +69,10 @@ function App() {
             path="/routes"
             element={<RoutePlanner />}
           />
+          <Route
+  path="/review"
+  element={<BookingReview />}
+/>
         </Routes>
       </div>
     </HashRouter>

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { trains } from "@/data/trains";
 import { useBooking } from "@/context/BookingContext";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 type SortOption = "ai" | "fare" | "availability" | "duration";
 
@@ -11,6 +13,7 @@ export default function TatkalDashboard() {
 
   const [sortBy, setSortBy] = useState<SortOption>("ai");
   const { selectedPassenger } = useBooking();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -113,9 +116,15 @@ export default function TatkalDashboard() {
         </p>
       </div>
     </div>
+
+    <Button
+      className="mt-6 w-full bg-cyan-600 hover:bg-cyan-700"
+      onClick={() => navigate("/review")}
+    >
+      🚆 Review Booking
+    </Button>
   </div>
 )}
-
         <div className="mt-8 rounded-2xl border border-cyan-500/20 bg-slate-900 p-8 text-center">
           <h2 className="text-2xl font-semibold">
             ⏳ Tatkal Opens In
