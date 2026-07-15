@@ -1,8 +1,10 @@
-import { useBooking } from "@/context/BookingContext";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useBooking } from "@/context/BookingContext";
 
 export default function BookingReview() {
   const { selectedPassenger } = useBooking();
+  const navigate = useNavigate();
 
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
@@ -39,9 +41,12 @@ export default function BookingReview() {
               </div>
             </div>
 
-            <Button className="mt-8 w-full">
-              Confirm Booking
-            </Button>
+            <Button
+  className="mt-8 w-full bg-green-600 hover:bg-green-700"
+  onClick={() => navigate("/confirmation")}
+>
+  ✅ Confirm Booking
+</Button>
           </>
         ) : (
           <p className="mt-8 text-red-400">

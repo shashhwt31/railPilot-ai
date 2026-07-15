@@ -7,6 +7,7 @@ import PassengerVault from "@/pages/PassengerVault";
 import TatkalDashboard from "@/pages/TatkalDashboard";
 import RoutePlanner from "@/pages/RoutePlanner";
 import BookingReview from "@/pages/BookingReview";
+import BookingConfirmation from "@/pages/BookingConfirmation";
 
 interface SearchData {
   from: string;
@@ -64,6 +65,11 @@ function App() {
             path="/tatkal"
             element={<TatkalDashboard />}
           />
+
+          <Route
+  path="/confirmation"
+  element={<BookingConfirmation />}
+/>
 
           <Route
             path="/routes"
