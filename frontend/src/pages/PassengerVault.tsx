@@ -5,6 +5,7 @@ import type { Passenger } from "@/components/Passenger/PassengerCard";
 
 import PassengerForm from "@/components/Passenger/PassengerForm";
 import PassengerSearch from "@/components/Passenger/PassengerSearch";
+import { toast } from "sonner";
 
 export default function PassengerVault() {
   const [name, setName] = useState("");
@@ -28,7 +29,7 @@ export default function PassengerVault() {
 
   const savePassenger = () => {
     if (!name || !age) {
-      alert("Please fill all fields.");
+      toast.error("Please fill all fields.");
       return;
     }
 
@@ -46,12 +47,16 @@ export default function PassengerVault() {
       );
 
       setPassengers(updated);
-      localStorage.setItem(
-        "passengers",
-        JSON.stringify(updated)
-      );
 
-      setEditingId(null);
+localStorage.setItem(
+  "passengers",
+  JSON.stringify(updated)
+);
+
+toast.success("Passenger updated successfully!");
+
+setEditingId(null);
+
     } else {
       const updated = [
         ...passengers,
@@ -67,10 +72,12 @@ export default function PassengerVault() {
 
       setPassengers(updated);
 
-      localStorage.setItem(
-        "passengers",
-        JSON.stringify(updated)
-      );
+localStorage.setItem(
+  "passengers",
+  JSON.stringify(updated)
+);
+
+toast.success("Passenger saved successfully!");
     }
 
     setName("");
@@ -94,17 +101,19 @@ export default function PassengerVault() {
   };
 
   const deletePassenger = (id: number) => {
-    const updated = passengers.filter(
-      (p) => p.id !== id
-    );
+  const updated = passengers.filter(
+    (p) => p.id !== id
+  );
 
-    setPassengers(updated);
+  setPassengers(updated);
 
-    localStorage.setItem(
-      "passengers",
-      JSON.stringify(updated)
-    );
-  };
+  localStorage.setItem(
+    "passengers",
+    JSON.stringify(updated)
+  );
+
+  toast.success("Passenger deleted successfully!");
+};
 
   const toggleFavorite = (id: number) => {
     const updated = passengers.map((p) =>
