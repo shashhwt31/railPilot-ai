@@ -42,11 +42,11 @@ export default function BookingReview() {
             </div>
 
             <Button
-  className="mt-8 w-full bg-green-600 hover:bg-green-700"
-  onClick={() => navigate("/confirmation")}
->
-  ✅ Confirm Booking
-</Button>
+            className="mt-8 w-full bg-green-600 hover:bg-green-700"
+            onClick={() => navigate("/confirmation")}
+            >
+            ✅ Confirm Booking
+            </Button>
           </>
         ) : (
           <p className="mt-8 text-red-400">
