@@ -17,9 +17,7 @@ interface PassengerCardProps {
   onToggleFavorite: (id: number) => void;
   onEdit: (passenger: Passenger) => void;
 }
-const navigate = useNavigate();
 
-const { setSelectedPassenger } = useBooking();
 
 export default function PassengerCard({
   passenger,
@@ -27,6 +25,9 @@ export default function PassengerCard({
   onToggleFavorite,
   onEdit,
 }: PassengerCardProps) {
+  const navigate = useNavigate();
+
+const { setSelectedPassenger } = useBooking();
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900 p-6 transition hover:border-cyan-500">
       <div className="flex items-center justify-between">
