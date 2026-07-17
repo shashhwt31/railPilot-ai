@@ -16,6 +16,7 @@ interface PassengerCardProps {
   onDelete: (id: number) => void;
   onToggleFavorite: (id: number) => void;
   onEdit: (passenger: Passenger) => void;
+  
 }
 
 
