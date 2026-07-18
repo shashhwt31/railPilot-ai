@@ -330,6 +330,12 @@ export default function TatkalDashboard() {
                   ? "Recommended because it balances fare, journey time, and seat availability."
                   : "Good alternative depending on your travel priorities."}
               </div>
+              <Button
+  className="mt-5 w-full bg-cyan-600 hover:bg-cyan-700"
+  onClick={() => navigate("/review")}
+>
+  🚆 Book This Train
+</Button>
             </div>
           ))}
         </div>
