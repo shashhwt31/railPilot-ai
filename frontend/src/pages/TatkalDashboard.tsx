@@ -4,6 +4,24 @@ import { useBooking } from "@/context/BookingContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
+const stations = [
+  "New Delhi (NDLS)",
+  "Mumbai Central (MMCT)",
+  "Howrah (HWH)",
+  "Chennai Central (MAS)",
+  "Bengaluru (SBC)",
+  "Lucknow (LKO)",
+  "Kanpur Central (CNB)",
+  "Prayagraj (PRYJ)",
+  "Patna Junction (PNBE)",
+  "Varanasi (BSB)",
+  "Agra Cantt (AGC)",
+  "Jaipur (JP)",
+  "Bhopal (BPL)",
+  "Ahmedabad (ADI)",
+  "Nagpur (NGP)",
+];
+
 type SortOption = "ai" | "fare" | "availability" | "duration";
 
 export default function TatkalDashboard() {
@@ -12,13 +30,23 @@ export default function TatkalDashboard() {
   );
 
   const [sortBy, setSortBy] = useState<SortOption>("ai");
+  const [fromStation, setFromStation] = useState("");
+  const [toStation, setToStation] = useState("");
+  const [journeyDate, setJourneyDate] = useState("");
   const { selectedPassenger } = useBooking();
   const navigate = useNavigate();
+
+  const swapStations = () => {
+  setFromStation(toStation);
+  setToStation(fromStation);
+};
+
 
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
     }, 1000);
+    
 
     return () => clearInterval(timer);
   }, []);
@@ -68,6 +96,72 @@ export default function TatkalDashboard() {
         <p className="mt-3 text-slate-400">
           AI-powered dashboard for smarter Tatkal bookings.
         </p>
+
+        <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6">
+  <h2 className="mb-5 text-2xl font-bold text-cyan-400">
+    🔍 Journey Search
+  </h2>
+
+  <div className="grid gap-4 md:grid-cols-4">
+    <div>
+      <label className="mb-2 block text-sm text-slate-400">
+        From
+      </label>
+
+      <input
+        list="stations"
+        value={fromStation}
+        onChange={(e) => setFromStation(e.target.value)}
+        placeholder="Enter departure station"
+        className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 outline-none focus:border-cyan-400"
+      />
+    </div>
+
+    <div className="flex items-end justify-center">
+  <Button
+    type="button"
+    variant="outline"
+    className="w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black"
+    onClick={swapStations}
+  >
+    ⇄ Swap
+  </Button>
+</div>
+
+    <div>
+      <label className="mb-2 block text-sm text-slate-400">
+        To
+      </label>
+
+      <input
+        list="stations"
+        value={toStation}
+        onChange={(e) => setToStation(e.target.value)}
+        placeholder="Enter destination"
+        className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 outline-none focus:border-cyan-400"
+      />
+    </div>
+
+    <div>
+      <label className="mb-2 block text-sm text-slate-400">
+        Journey Date
+      </label>
+
+      <input
+        type="date"
+        value={journeyDate}
+        onChange={(e) => setJourneyDate(e.target.value)}
+        className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 outline-none focus:border-cyan-400"
+      />
+    </div>
+  </div>
+
+  <datalist id="stations">
+    {stations.map((station) => (
+      <option key={station} value={station} />
+    ))}
+  </datalist>
+</div>
 
         {selectedPassenger && (
   <div className="mt-8 rounded-2xl border border-cyan-500/30 bg-slate-900 p-6 shadow-lg">
