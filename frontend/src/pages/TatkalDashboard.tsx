@@ -4,6 +4,7 @@ import { useBooking } from "@/context/BookingContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import BookingProgress from "@/components/BookingProgress";
+import TrainDetailsModal from "@/components/TrainDetailsModal";
 
 const stations = [
   "New Delhi (NDLS)",
@@ -34,6 +35,8 @@ export default function TatkalDashboard() {
   const [fromStation, setFromStation] = useState("");
   const [toStation, setToStation] = useState("");
   const [journeyDate, setJourneyDate] = useState("");
+  const [selectedTrain, setSelectedTrain] = useState<any>(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const { selectedPassenger } = useBooking();
   const navigate = useNavigate();
 
@@ -333,6 +336,17 @@ export default function TatkalDashboard() {
                   ? "Recommended because it balances fare, journey time, and seat availability."
                   : "Good alternative depending on your travel priorities."}
               </div>
+
+              <Button
+  variant="outline"
+  className="mt-4 w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black"
+  onClick={() => {
+    setSelectedTrain(train);
+    setModalOpen(true);
+  }}
+>
+  View Details
+</Button>
               <Button
   className="mt-5 w-full bg-cyan-600 hover:bg-cyan-700"
   onClick={() => navigate("/review")}
@@ -343,6 +357,12 @@ export default function TatkalDashboard() {
           ))}
         </div>
       </div>
+
+      <TrainDetailsModal
+  train={selectedTrain}
+  open={modalOpen}
+  onClose={() => setModalOpen(false)}
+/>
     </main>
   );
 }
