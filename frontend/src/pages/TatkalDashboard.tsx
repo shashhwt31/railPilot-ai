@@ -3,6 +3,7 @@ import { trains } from "@/data/trains";
 import { useBooking } from "@/context/BookingContext";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import BookingProgress from "@/components/BookingProgress";
 
 const stations = [
   "New Delhi (NDLS)",
@@ -97,58 +98,7 @@ export default function TatkalDashboard() {
           AI-powered dashboard for smarter Tatkal bookings.
         </p>
 
-        <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6">
-  <h2 className="mb-6 text-xl font-semibold text-cyan-400">
-    Booking Progress
-  </h2>
-
-  <div className="flex flex-wrap items-center justify-between gap-4">
-
-    <div className="flex items-center gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 font-bold text-black">
-        ✓
-      </div>
-      <span>Passenger</span>
-    </div>
-
-    <div className="h-1 flex-1 rounded bg-green-500"></div>
-
-    <div className="flex items-center gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-500 font-bold text-black">
-        ✓
-      </div>
-      <span>Journey</span>
-    </div>
-
-    <div className="h-1 flex-1 rounded bg-cyan-500"></div>
-
-    <div className="flex items-center gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-cyan-500 font-bold text-black">
-        3
-      </div>
-      <span>Train</span>
-    </div>
-
-    <div className="h-1 flex-1 rounded bg-slate-700"></div>
-
-    <div className="flex items-center gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700">
-        4
-      </div>
-      <span>Review</span>
-    </div>
-
-    <div className="h-1 flex-1 rounded bg-slate-700"></div>
-
-    <div className="flex items-center gap-2">
-      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700">
-        5
-      </div>
-      <span>Confirm</span>
-    </div>
-
-  </div>
-</div>
+        <BookingProgress currentStep={3} />
 
         <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900 p-6">
   <h2 className="mb-5 text-2xl font-bold text-cyan-400">
