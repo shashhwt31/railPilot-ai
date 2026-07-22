@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import BookingProgress from "@/components/BookingProgress";
 import TrainDetailsModal from "@/components/TrainDetailsModal";
+import StationAutocomplete from "@/components/StationAutocomplete";
 
 const stations = [
   "New Delhi (NDLS)",
@@ -109,19 +110,13 @@ export default function TatkalDashboard() {
   </h2>
 
   <div className="grid gap-4 md:grid-cols-4">
-    <div>
-      <label className="mb-2 block text-sm text-slate-400">
-        From
-      </label>
-
-      <input
-        list="stations"
-        value={fromStation}
-        onChange={(e) => setFromStation(e.target.value)}
-        placeholder="Enter departure station"
-        className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 outline-none focus:border-cyan-400"
-      />
-    </div>
+    <StationAutocomplete
+  label="From"
+  value={fromStation}
+  onChange={setFromStation}
+  stations={stations}
+  placeholder="Enter departure station"
+/>
 
     <div className="flex items-end justify-center">
   <Button
@@ -134,19 +129,13 @@ export default function TatkalDashboard() {
   </Button>
 </div>
 
-    <div>
-      <label className="mb-2 block text-sm text-slate-400">
-        To
-      </label>
-
-      <input
-        list="stations"
-        value={toStation}
-        onChange={(e) => setToStation(e.target.value)}
-        placeholder="Enter destination"
-        className="w-full rounded-lg border border-slate-700 bg-slate-800 p-3 outline-none focus:border-cyan-400"
-      />
-    </div>
+    <StationAutocomplete
+  label="To"
+  value={toStation}
+  onChange={setToStation}
+  stations={stations}
+  placeholder="Enter destination"
+/>
 
     <div>
       <label className="mb-2 block text-sm text-slate-400">
@@ -162,11 +151,7 @@ export default function TatkalDashboard() {
     </div>
   </div>
 
-  <datalist id="stations">
-    {stations.map((station) => (
-      <option key={station} value={station} />
-    ))}
-  </datalist>
+  
 </div>
 
         {selectedPassenger && (

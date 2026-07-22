@@ -24,8 +24,20 @@ export default function TrainDetailsModal({
   if (!open || !train) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
-      <div className="w-full max-w-lg rounded-2xl bg-slate-900 p-6 shadow-2xl">
+    <div
+  className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4"
+  onClick={onClose}
+>
+      <div
+  className="relative w-full max-w-lg rounded-2xl bg-slate-900 p-6 shadow-2xl"
+  onClick={(e) => e.stopPropagation()}
+>
+        <button
+  onClick={onClose}
+  className="absolute right-4 top-4 text-2xl text-slate-400 transition hover:text-white"
+>
+  ×
+</button>
         <h2 className="text-3xl font-bold text-cyan-400">
           {train.name}
         </h2>
@@ -49,9 +61,10 @@ export default function TrainDetailsModal({
         </div>
 
         <Button
-          className="mt-6 w-full"
-          onClick={onClose}
-        >
+  variant="outline"
+  className="mt-6 w-full border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-black"
+  onClick={onClose}
+>
           Close
         </Button>
       </div>
